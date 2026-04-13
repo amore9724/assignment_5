@@ -5,9 +5,9 @@ Arya More, Michael Chen
 # Compilation
 
 First do
-```cc countnames.c helper_functions.c -o countnames -Wall -Werror``` for countnames
+```cc countnames.c helper_functions.c dictionary_hashtable.c -o countnames -Wall -Werror``` for countnames
 
-Then do ```cc shell1.c helper_functions.c -o shell1 -Wall -Werror``` for shell1.
+Then do ```cc shell1.c helper_functions.c dictionary_hashtable.c -o shell1 -Wall -Werror``` for shell1.
 
 # Running the program
 
