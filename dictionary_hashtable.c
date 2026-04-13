@@ -70,8 +70,6 @@ struct nlist *insert(char *name, int pid, int index)
     unsigned hashval;
     if ((np = lookup(pid)) == NULL) { /* case 1: the pid is not found, so you have to create it with malloc. Then you want to set the pid, command and index */
         np = (struct nlist *) malloc(sizeof(*np));
-        if (np == NULL || (np->name = strdup(name)) == NULL)
-          return NULL;
         hashval = hash(pid);
         np->next = hashtab[hashval];
         hashtab[hashval] = np;
