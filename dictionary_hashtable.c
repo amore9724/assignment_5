@@ -30,7 +30,8 @@
 #include "countnames.h"
 
 
-struct nlist { /* table entry: */
+struct nlist {
+    /* table entry: */
     struct nlist *next; /* next entry in chain */
     int index; // this is the line index in the input text file
     int pid; // the process id. you can use the pid result of wait to lookup in the hashtable
@@ -50,12 +51,11 @@ unsigned hash(int pid) {
 
 /* lookup: look for s in hashtab */
 /* This is traversing the linked list under a slot of the hash table. The array position to look in is returned by the hash function */
-struct nlist *lookup(int pid)
-{
+struct nlist *lookup(int pid) {
     struct nlist *np;
     for (np = hashtab[hash(pid)]; np != NULL; np = np->next)
         if (pid == np->pid)
-          return np; /* found */
+            return np; /* found */
     return NULL; /* not found */
 }
 
@@ -64,15 +64,38 @@ struct nlist *lookup(int pid)
 /* you will save the returned nlist node in a variable (mynode). */
 /* Then you can set the starttime and finishtime from your main function: */
 /* mynode->starttime = starttime; mynode->finishtime = finishtime; */
-struct nlist *insert(char *name, int pid, int index)
-{
+struct nlist *insert(char *command, int pid, int index) {
     struct nlist *np;
     unsigned hashval;
-    if ((np = lookup(pid)) == NULL) { /* case 1: the pid is not found, so you have to create it with malloc. Then you want to set the pid, command and index */
+
+    if ((np = lookup(pid)) == NULL) {
+        /* Case 1: pid not found — allocate a new node */
         np = (struct nlist *) malloc(sizeof(*np));
+        if (np == NULL)
+            return NULL; /* out of memory */
+
+        /* Copy the command string safely */
+        np->command = strdup(command);
+        if (np->command == NULL) {
+            free(np);
+            return NULL;
+        }
+
+        np->pid = pid;
+        np->index = index;
+        np->starttime = 0;
+        np->finishtime = 0;
+
+        /* Insert at the front of the chain */
         hashval = hash(pid);
         np->next = hashtab[hashval];
         hashtab[hashval] = np;
-    } else { } /* case 2: the pid is already there in the hashslot, i.e. lookup found the pid. In this case you can either do nothing, or you may want to set again the command  and index (depends on your implementation). */
+    } else {
+        /* Case 2: pid already exists — update command and index */
+        free(np->command);
+        np->command = strdup(command);
+        np->index = index;
+    }
+
     return np;
 }

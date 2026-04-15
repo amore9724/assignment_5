@@ -19,7 +19,7 @@
 typedef struct {
     char *name;
     int count;
-    NameCountData *next;
+    struct NameCountData *next;
 } NameCountData;  // Contains the name and the amount of time it appears in a file.
 
 typedef enum {
