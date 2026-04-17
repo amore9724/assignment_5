@@ -56,7 +56,8 @@ int main(int argc, char *argv[]) /* int argc = argument count
             fprintf(stderr, "Warning: Line %d in Child %d is empty.\n", lnum, getpid());
             continue;
         }
-        names[i++] = strdup(tok); /* This allocates memory on the heap to store the string,
+        NameCountData ncd;
+        ncd.name = strdup(tok); /* This allocates memory on the heap to store the string,
                                       which needs to be freed later. */
     }
     fclose(f);

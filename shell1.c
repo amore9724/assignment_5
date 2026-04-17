@@ -110,7 +110,8 @@ int main(int argc, char *argv[]) {
         while (wait(NULL) > 0) {    // Wait until all children are finished.
         }
         // This is basically the same code to aggregate counts of all names.
-
+        unsigned long size = 10*sizeof(NameCountData);
+        NameCountData** global = (NameCountData**) malloc(size);
         for (int j = 1; j < i; j++) {
             int slot = j - 1;   // Slot is in 0-indexed position.
 
