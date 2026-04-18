@@ -12,7 +12,7 @@ unsigned hash(char *name) {
     return hashval % HASHSIZE;
 }
 
-/* lookup: look for s in hashtab */
+/* lookup: Traverse hash table and look for name. */
 NameCountData *lookup(char *name) {
     NameCountData *np;
     for (np = hashtab[hash(name)]; np != NULL; np = np->next)
@@ -21,14 +21,9 @@ NameCountData *lookup(char *name) {
     return NULL; /* not found */
 }
 
-/*  insert: put (name, defn) in hashtab
-    This insert returns a nlist node. Thus when you call insert in your main function
-    you will save the returned nlist node in a variable (mynode).
-    Then you can set the starttime and finishtime from your main function:
-    mynode->starttime = starttime; mynode->finishtime = finishtime; */
 NameCountData *insert(NameCountMsg *ncd) {
     NameCountData *np;
-    if ((np = lookup(ncd->name)) == NULL) {
+    if ((np = lookup(ncd->name)) == NULL) {     // No entry found.
         np = (NameCountData *) malloc(sizeof(NameCountData));   // Create new entry.
         if (np == NULL) return NULL;        // NULL tester
         np->name = strdup(ncd->name);       // Copy name to np->name structure
@@ -50,8 +45,8 @@ void table_print() {
     for (int i = 0; i < HASHSIZE; i++) {
         NameCountData *np = hashtab[i];
         while (np != NULL) {
-            printf("%s: %d\n", np->name, np->count);
-            np = np->next;
+            printf("%s: %d\n", np->name, np->count);    // Print everything in table.
+            np = np->next;                                    // Go to next element in table.
         }
     }
 }

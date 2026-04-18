@@ -19,7 +19,7 @@
 typedef struct {
     char name[MLINE];
     int count;
-} NameCountMsg;
+} NameCountMsg;             // For child to send to parent.
 
 // NameCountData is for hash table
 typedef struct NameCountData {

@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) /* int argc = argument count
     int slot = atoi(argv[2]);   // Get slot from parent.
     void *child_mem = mmap(NULL, global_size, PROT_READ | PROT_WRITE, MAP_SHARED, mem_fd, 0);   // Map memory to that slot
 
-    if (child_mem == MAP_FAILED) {
+    if (child_mem == MAP_FAILED) {  // Free everything, the program needs to exit and no longer needs these.
         perror("mmap error");
         clnup(names, nused);
         free(names);
@@ -87,17 +87,17 @@ int main(int argc, char *argv[]) /* int argc = argument count
     NameCountMsg *space = (NameCountMsg *) child_mem + slot * MNAME; // Compute address where data will be written.
 
     for (i = 0; nused[i] != 0; i++) {
-        snprintf(space[i].name, MLINE, "%s", nused[i]);
-        space[i].count = count[i];
+        snprintf(space[i].name, MLINE, "%s", nused[i]); // Put name to slot in space.
+        space[i].count = count[i];  // Put count to slot in space.
     }
 
-
-    fflush(stdout); // Flushes stdout to prevent further issues.
-    clnup(names, nused); // This will free the allocated memory
+    // Cleanup routines (flushing output, freeing memory, unmapping shared memory, closing mem_fd)
+    fflush(stdout);
+    clnup(names, nused);
     free(names);
     free(nused);
     free(count);
-    munmap(child_mem, global_size); // Unmaps memory.
-    close(mem_fd);  // Closes mem_fd.
+    munmap(child_mem, global_size);
+    close(mem_fd);
     return 0;
 }
