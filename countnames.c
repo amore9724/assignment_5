@@ -60,22 +60,23 @@ int main(int argc, char *argv[]) /* int argc = argument count
                                       which needs to be freed later. */
     }
     fclose(f);
-    int *count   = calloc(MNAME, sizeof(int)); // Contains the number of times a name occurs in the file.
+    int *count = calloc(MNAME, sizeof(int)); // Contains the number of times a name occurs in the file.
     char **nused = calloc(MNAME, sizeof(char *)); // Contains the number of unique names used in the file.
     ncount(names, nused, count); // Counts the names used and sends it to the arrays.
     int mem_fd = shm_open(SHARED_MEMORY_NAME, O_RDWR, 0); // Open memory area in child process.
 
     if (mem_fd == -1) {
-        perror("shm_open error");   // Can't open assigned memory location.
+        perror("shm_open error"); // Can't open assigned memory location.
     }
 
     if (argv[2] == NULL) {
         perror("slot missing"); // Slot is not passed as an argument.
     }
-    int slot = atoi(argv[2]);   // Get slot from parent.
-    void *child_mem = mmap(NULL, global_size, PROT_READ | PROT_WRITE, MAP_SHARED, mem_fd, 0);   // Map memory to that slot
+    int slot = atoi(argv[2]); // Get slot from parent.
+    void *child_mem = mmap(NULL, global_size, PROT_READ | PROT_WRITE, MAP_SHARED, mem_fd, 0); // Map memory to that slot
 
-    if (child_mem == MAP_FAILED) {  // Free everything, the program needs to exit and no longer needs these.
+    if (child_mem == MAP_FAILED) {
+        // Free everything, the program needs to exit and no longer needs these.
         perror("mmap error");
         clnup(names, nused);
         free(names);
@@ -88,7 +89,7 @@ int main(int argc, char *argv[]) /* int argc = argument count
 
     for (i = 0; nused[i] != 0; i++) {
         snprintf(space[i].name, MLINE, "%s", nused[i]); // Put name to slot in space.
-        space[i].count = count[i];  // Put count to slot in space.
+        space[i].count = count[i]; // Put count to slot in space.
     }
 
     // Cleanup routines (flushing output, freeing memory, unmapping shared memory, closing mem_fd)

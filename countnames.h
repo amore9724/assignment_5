@@ -19,14 +19,14 @@
 typedef struct {
     char name[MLINE];
     int count;
-} NameCountMsg;             // For child to send to parent.
+} NameCountMsg; // For child to send to parent.
 
 // NameCountData is for hash table
 typedef struct NameCountData {
     char *name;
     int count;
     struct NameCountData *next;
-} NameCountData;  // Contains the name and the amount of time it appears in a file.
+} NameCountData; // Contains the name and the amount of time it appears in a file.
 
 typedef enum {
     TYPE_NAMECOUNT,
@@ -43,8 +43,12 @@ void nprinter(char *nused[], int count[]); // Prints a string and the amount of 
 void clnup(char *a1[], char *a2[]); // Frees allocated memory.
 void ncount(char *arr[], char *nused[], int count[]); // Counts the number of times a string occurs in a file.
 unsigned hash(char *name);
+
 NameCountData *lookup(char *name);
-NameCountData *insert(NameCountMsg *ncd);
+
+NameCountData *insert(NameCountMsg *ncm);
+
 void table_print();
+
 void table_destroy();
 #endif

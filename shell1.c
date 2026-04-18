@@ -13,17 +13,18 @@ void *GLOBAL = NULL;
 int mem_fd = -1;
 size_t global_size = 0;
 
-void handle_sigint(int sig) {   // Cleans up if CTRL+C is called.
-    if (GLOBAL) munmap(GLOBAL, global_size);    // If memory is mapped, then unmap.
-    if (mem_fd != -1) close(mem_fd);    // If mem_fd has been assigned, then close it.
-    shm_unlink(SHARED_MEMORY_NAME);     // Unlink mapped memory.
-    _exit(0);   // Everything that needs to be cleaned up has been cleaned up, so this variant is used.
+void handle_sigint(int sig) {
+    // Cleans up if CTRL+C is called.
+    if (GLOBAL) munmap(GLOBAL, global_size); // If memory is mapped, then unmap.
+    if (mem_fd != -1) close(mem_fd); // If mem_fd has been assigned, then close it.
+    shm_unlink(SHARED_MEMORY_NAME); // Unlink mapped memory.
+    _exit(0); // Everything that needs to be cleaned up has been cleaned up, so this variant is used.
 }
 
 int main(int argc, char *argv[]) {
     //raise(SIGSTOP); // Comment if unneeded, this is for debugging purposes.
-    signal(SIGINT, handle_sigint);  // Signal handler.
-    mkdir("output", 0755);  // Creates output directory if it doesn't already exist.
+    signal(SIGINT, handle_sigint); // Signal handler.
+    mkdir("output", 0755); // Creates output directory if it doesn't already exist.
     char buf[MAXLINE];
     char *args[MAXARGS];
     mem_fd = shm_open(SHARED_MEMORY_NAME, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR); // Open memory object to be used.
@@ -31,15 +32,15 @@ int main(int argc, char *argv[]) {
         perror("shm_open error");
     }
 
-    global_size = MAXARGS * MSIZE * sizeof(NameCountMsg);    // Initialize size of memory object.
+    global_size = MAXARGS * MSIZE * sizeof(NameCountMsg); // Initialize size of memory object.
 
     if (ftruncate(mem_fd, global_size) == -1) {
         perror("ftruncate error");
     }
 
     GLOBAL = mmap(NULL, global_size, PROT_READ | PROT_WRITE,
-                        MAP_SHARED,
-                        mem_fd, 0); // Actually maps the memory object in question to memory.
+                  MAP_SHARED,
+                  mem_fd, 0); // Actually maps the memory object in question to memory.
 
     if (GLOBAL == MAP_FAILED) {
         perror("mmap error");
@@ -105,7 +106,8 @@ int main(int argc, char *argv[]) {
 
         /* Parent waits until all children are finished */
 
-        while (wait(NULL) > 0) {    // Wait until all children are finished.
+        while (wait(NULL) > 0) {
+            // Wait until all children are finished.
         }
         for (int j = 1; j < i; j++) {
             int slot = j - 1;
@@ -117,8 +119,8 @@ int main(int argc, char *argv[]) {
                 insert(&child_slot[k]);
             }
         }
-        table_print();  // Prints the names to output.
-        table_destroy();    // Destroys hash table.
+        table_print(); // Prints the names to output.
+        table_destroy(); // Destroys hash table.
         fflush(stdout);
         fflush(stderr);
         printf("%% ");
@@ -129,7 +131,7 @@ int main(int argc, char *argv[]) {
     }
 
     munmap(GLOBAL, global_size); // Unmaps mapped memory.
-    close(mem_fd);  // Closes memory file descriptor
+    close(mem_fd); // Closes memory file descriptor
     shm_unlink(SHARED_MEMORY_NAME); // Unlinks memory on file system
     exit(0);
 }
