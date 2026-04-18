@@ -6,7 +6,7 @@ static int entry_count = 0;
 
 void table_init() {                     // Initialize table.
     hashsize = 10;
-    hashtab = calloc(hashsize, sizeof(NameCountData *));
+    hashtab = calloc(hashsize, sizeof(NameCountData *));    // Allocate memory.
     if (hashtab == NULL) {
         perror("calloc");
         exit(1);
@@ -15,7 +15,7 @@ void table_init() {                     // Initialize table.
 
 /* This is the hash function: form hash value for string s */
 /* You can use a simple hash function: pid % hashsize */
-unsigned hash(char *name) {
+unsigned hash(const char *name) {                                 // Hashes entry in table.
     unsigned hashval = 0;
     for (int i = 0; name[i] != '\0'; i++)
         hashval += name[i];
@@ -23,11 +23,10 @@ unsigned hash(char *name) {
 }
 
 /* lookup: Traverse hash table and look for name. */
-NameCountData *lookup(char *name) {
-    if (hashtab == NULL)
+NameCountData *lookup(const char *name) {
+    if (hashtab == NULL)  // Every time this if statement is used it checks if the hashtable has been allocated or not.
         return NULL;
-    NameCountData *np;
-    for (np = hashtab[hash(name)]; np != NULL; np = np->next)
+    for (NameCountData *np = hashtab[hash(name)]; np != NULL; np = np->next)
         if (strcmp(name, np->name) == 0)
             return np; /* found */
     return NULL; /* not found */
@@ -65,7 +64,7 @@ static void rehash() {                                  // Rehashes array
     }
 }
 
-NameCountData *insert(NameCountMsg *ncm) {
+NameCountData *insert(const NameCountMsg *ncm) {
     if (hashtab == NULL)
         table_init();
     NameCountData *ncd;
@@ -90,11 +89,11 @@ NameCountData *insert(NameCountMsg *ncm) {
     return ncd;                              // Return NameCountData structure
 }
 
-void table_print() {
+void table_print() {                                        // Print contents of whole table.
     if (hashtab == NULL)
         return;
     for (int i = 0; i < hashsize; i++) {
-        NameCountData *np = hashtab[i];
+        NameCountData *np = hashtab[i];                       // Get current element in table.
         while (np != NULL) {
             printf("%s: %d\n", np->name, np->count);    // Print everything in table.
             np = np->next;                                    // Go to next element in table.
@@ -113,7 +112,7 @@ void table_destroy() {                          // Destroy table and initialize 
             np = next;
         }
     }
-    free(hashtab);
+    free(hashtab);                           // Free array itself and clean up.
     hashtab = NULL;
     hashsize = 0;
     entry_count = 0;

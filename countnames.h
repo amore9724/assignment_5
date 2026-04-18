@@ -41,11 +41,11 @@ int check_in(char *a, char *b[]); // Checks if a string is in the file. Returns 
 void nprinter(char *nused[], int count[]); // Prints a string and the amount of times it occurs.
 void clnup(char *a1[], char *a2[]); // Frees allocated memory.
 void ncount(char *arr[], char *nused[], int count[]); // Counts the number of times a string occurs in a file.
-unsigned hash(char *name);
+unsigned hash(const char *name);
 
-NameCountData *lookup(char *name);
+NameCountData *lookup(const char *name);
 
-NameCountData *insert(NameCountMsg *ncm);
+NameCountData *insert(const NameCountMsg *ncm);
 
 void table_print();
 
