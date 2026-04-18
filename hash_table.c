@@ -14,7 +14,7 @@ void table_init() {                     // Initialize table.
 }
 
 /* This is the hash function: form hash value for string s */
-/* You can use a simple hash function: pid % HASHSIZE */
+/* You can use a simple hash function: pid % hashsize */
 unsigned hash(char *name) {
     unsigned hashval = 0;
     for (int i = 0; name[i] != '\0'; i++)
@@ -112,9 +112,9 @@ void table_destroy() {                          // Destroy table and initialize 
             free(np);                        // Free node itself
             np = next;
         }
-        hashtab = NULL;
-        hashsize = 0;
-        entry_count = 0;
     }
     free(hashtab);
+    hashtab = NULL;
+    hashsize = 0;
+    entry_count = 0;
 }
