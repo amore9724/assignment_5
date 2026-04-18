@@ -79,15 +79,11 @@ int main(int argc, char *argv[]) /* int argc = argument count
         perror("mmap error");
     }
 
-    NameCountData *space = (NameCountData *) child_mem + slot * MNAME; // Compute address where data will be written.
+    NameCountMsg *space = (NameCountMsg *) child_mem + slot * MNAME; // Compute address where data will be written.
 
     for (i = 0; nused[i] != 0; i++) {
-        // Sends data to parent
-
-        NameCountData ncd; // Initializes NameCountData struct to send to parent.
-        strcpy(ncd.name, nused[i]); // Copies the current name into the communication header.
-        ncd.count = count[i]; // Sets the count of the current name to be set.
-        memcpy(&space[i], &ncd, sizeof(NameCountData)); // Copy data to a NameCountData-sized slot in memory.
+        strncpy(space[i].name, nused[i], MLINE - 1);
+        space[i].count = count[i];
     }
 
 

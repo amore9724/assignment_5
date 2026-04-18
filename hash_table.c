@@ -26,7 +26,7 @@ NameCountData *lookup(char *name) {
     you will save the returned nlist node in a variable (mynode).
     Then you can set the starttime and finishtime from your main function:
     mynode->starttime = starttime; mynode->finishtime = finishtime; */
-NameCountData *insert(NameCountData *ncd) {
+NameCountData *insert(NameCountMsg *ncd) {
     NameCountData *np;
     if ((np = lookup(ncd->name)) == NULL) {
         np = (NameCountData *) malloc(sizeof(NameCountData));   // Create new entry.

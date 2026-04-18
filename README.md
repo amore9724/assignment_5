@@ -7,7 +7,7 @@ Arya More, Michael Chen
 First do
 ```cc countnames.c helper_functions.c hash_table.c -o countnames -Wall -Werror``` for countnames
 
-Then do ```cc shell1.c helper_functions.c hash_table.c -o shell1 -Wall -Werror``` for shell1.
+Then do `cc shell1.c helper_functions.c hash_table.c -o shell1 -Wall -Werror` for shell1.
 
 # Running the program
 

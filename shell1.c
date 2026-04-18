@@ -49,14 +49,12 @@ int main(int argc, char *argv[]) {
 
     char *nused[MAXLINE] = {0};
     int count[MAXLINE] = {0};
-    int nused_count = 0;
 
     while (fgets(buf, MAXLINE, stdin) != NULL) {
         // Read argument from stdin.
         memset(nused, 0, sizeof(nused)); /* Fills nused and count with 0s once loop restarts. */
         memset(count, 0, sizeof(count));
         memset(GLOBAL, 0, global_size);
-        nused_count = 0;
 
         if (buf[strlen(buf) - 1] == '\n')
             buf[strlen(buf) - 1] = 0; /* replace newline with null */
@@ -109,15 +107,12 @@ int main(int argc, char *argv[]) {
 
         while (wait(NULL) > 0) {    // Wait until all children are finished.
         }
-        // This is basically the same code to aggregate counts of all names.
-        unsigned long size = 10*sizeof(NameCountData);
-        NameCountData** global = (NameCountData**) malloc(size);
         for (int j = 1; j < i; j++) {
             int slot = j - 1;
-            NameCountData *child_slot = (NameCountData *) GLOBAL + slot * MNAME;
+            NameCountMsg *child_slot = (NameCountMsg *) GLOBAL + slot * MNAME;
 
             for (int k = 0; k < MNAME && child_slot[k].name[0] != '\0'; k++) {
-                insert(&child_slot[k]);
+                insert(child_slot);
             }
         }
         table_print();  // Prints the names to output.

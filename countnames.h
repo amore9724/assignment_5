@@ -16,8 +16,13 @@
 #define output_path "output"    // Name of output directory.
 #define SHARED_MEMORY_NAME "/shared_memory_i"   // Name of shared memory area. It is a macro for portability.
 
+typedef struct {
+    char name[MLINE];
+    int count;
+} NameCountMsg;
 
-typedef struct NameCountData{
+// NameCountData is for hash table
+typedef struct NameCountData {
     char *name;
     int count;
     struct NameCountData *next;
@@ -39,7 +44,7 @@ void clnup(char *a1[], char *a2[]); // Frees allocated memory.
 void ncount(char *arr[], char *nused[], int count[]); // Counts the number of times a string occurs in a file.
 unsigned hash(char *name);
 NameCountData *lookup(char *name);
-NameCountData *insert(NameCountData *ncd);
+NameCountData *insert(NameCountMsg *ncd);
 void table_print();
 void table_destroy();
 #endif
