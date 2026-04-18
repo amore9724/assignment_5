@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
         perror("shm_open error");
     }
 
-    global_size = MSIZE * sizeof(NameCountData);    // Initialize size of memory object.
+    global_size = MAXARGS * MSIZE * sizeof(NameCountMsg);    // Initialize size of memory object.
 
     if (ftruncate(mem_fd, global_size) == -1) {
         perror("ftruncate error");
@@ -111,8 +111,10 @@ int main(int argc, char *argv[]) {
             int slot = j - 1;
             NameCountMsg *child_slot = (NameCountMsg *) GLOBAL + slot * MNAME;
 
-            for (int k = 0; k < MNAME && child_slot[k].name[0] != '\0'; k++) {
-                insert(child_slot);
+            for (int k = 0; k < MNAME; k++) {
+                if (child_slot[k].name[0] == '\0') break;
+                if (child_slot[k].count <= 0 || child_slot[k].count > MSIZE) break;
+                insert(&child_slot[k]);
             }
         }
         table_print();  // Prints the names to output.

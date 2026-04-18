@@ -8,8 +8,8 @@
 #define COUNTNAMES_H_
 #define HASHSIZE 4096
 #define MSIZE 10001 // Maximum number of lines in the program(empty or non empty)
-#define MNAME 101   // Maximum number of names.
-#define MLINE 31    // Maximum number of characters in a line.
+#define MNAME 1001   // Maximum number of names.
+#define MLINE 256    // Maximum number of characters in a line.
 #define MAXLINE 4096    // This is the maximum amount of lines that will be read.
 #define PROGRAMNAME "countnames"    // This is the name of the program to be executed.
 #define MAXARGS 100  // Maximum number of arguments
