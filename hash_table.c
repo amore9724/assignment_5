@@ -6,7 +6,7 @@ static int entry_count = 0;
 
 void table_init() {                     // Initialize table.
     hashsize = 10;
-    hashtab = calloc(hashsize, 10*sizeof(NameCountData *));
+    hashtab = calloc(hashsize, sizeof(NameCountData *));
     if (hashtab == NULL) {
         perror("calloc");
         exit(1);
@@ -19,7 +19,7 @@ unsigned hash(char *name) {
     unsigned hashval = 0;
     for (int i = 0; name[i] != '\0'; i++)
         hashval += name[i];
-    return hashval % HASHSIZE;
+    return hashval % hashsize;
 }
 
 /* lookup: Traverse hash table and look for name. */
@@ -93,7 +93,7 @@ NameCountData *insert(NameCountMsg *ncm) {
 void table_print() {
     if (hashtab == NULL)
         return;
-    for (int i = 0; i < HASHSIZE; i++) {
+    for (int i = 0; i < hashsize; i++) {
         NameCountData *np = hashtab[i];
         while (np != NULL) {
             printf("%s: %d\n", np->name, np->count);    // Print everything in table.
@@ -104,7 +104,7 @@ void table_print() {
 void table_destroy() {                          // Destroy table and initialize everything
     if (hashtab == NULL)
         return;
-    for (int i = 0; i < HASHSIZE; i++) {
+    for (int i = 0; i < hashsize; i++) {
         NameCountData *np = hashtab[i];
         while (np != NULL) {
             NameCountData *next = np->next;  // Save next pointer before freeing
@@ -112,9 +112,9 @@ void table_destroy() {                          // Destroy table and initialize 
             free(np);                        // Free node itself
             np = next;
         }
-        free(hashtab);
         hashtab = NULL;
         hashsize = 0;
         entry_count = 0;
     }
+    free(hashtab);
 }
