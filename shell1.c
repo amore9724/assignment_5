@@ -113,23 +113,15 @@ int main(int argc, char *argv[]) {
         unsigned long size = 10*sizeof(NameCountData);
         NameCountData** global = (NameCountData**) malloc(size);
         for (int j = 1; j < i; j++) {
-            int slot = j - 1;   // Slot is in 0-indexed position.
+            int slot = j - 1;
+            NameCountData *child_slot = (NameCountData *) GLOBAL + slot * MNAME;
 
-            NameCountData *child_slot = (NameCountData *) GLOBAL + slot * MNAME;    // Compute child slot position.
-
-            for (int k = 0; k < MNAME && child_slot[k].name[0] != '\0'; k++) {  // For each file go until the max number of names are reached or there are no more names.
-                NameCountData temp = child_slot[k];
-                int index = check_in(temp.name, nused);
-                if (index == -1) {  // If the name does not exist, then add an entry for it.
-                    nused[nused_count++] = strdup(temp.name);
-                    count[nused_count - 1] = temp.count;
-                } else {    // Add to existing count.
-                    count[index] += temp.count;
-                }
+            for (int k = 0; k < MNAME && child_slot[k].name[0] != '\0'; k++) {
+                insert(&child_slot[k]);
             }
         }
-
-        nprinter(nused, count); // Prints the names to output.
+        table_print();  // Prints the names to output.
+        table_destroy();    // Destroys hash table.
         fflush(stdout);
         fflush(stderr);
         printf("%% ");

@@ -1,6 +1,6 @@
 #include "countnames.h"
 
-#define HASHSIZE 4096
+
 static NameCountData *hashtab[HASHSIZE];  /* pointer table */
 
 /* This is the hash function: form hash value for string s */
@@ -45,4 +45,25 @@ NameCountData *insert(NameCountData *ncd) {
         np->count += ncd->count;            // Increment counter for name.
     }
     return np;                              // Return NameCountData structure
+}
+void table_print() {
+    for (int i = 0; i < HASHSIZE; i++) {
+        NameCountData *np = hashtab[i];
+        while (np != NULL) {
+            printf("%s: %d\n", np->name, np->count);
+            np = np->next;
+        }
+    }
+}
+void table_destroy() {
+    for (int i = 0; i < HASHSIZE; i++) {
+        NameCountData *np = hashtab[i];
+        while (np != NULL) {
+            NameCountData *next = np->next;  // Save next pointer before freeing
+            free(np->name);                  // Free strdup string
+            free(np);                        // Free node itself
+            np = next;
+        }
+        hashtab[i] = NULL;
+    }
 }

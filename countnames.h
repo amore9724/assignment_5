@@ -6,6 +6,7 @@
 #include <fcntl.h>
 #ifndef COUNTNAMES_H_
 #define COUNTNAMES_H_
+#define HASHSIZE 4096
 #define MSIZE 10001 // Maximum number of lines in the program(empty or non empty)
 #define MNAME 101   // Maximum number of names.
 #define MLINE 31    // Maximum number of characters in a line.
@@ -36,4 +37,9 @@ int check_in(char *a, char *b[]); // Checks if a string is in the file. Returns 
 void nprinter(char *nused[], int count[]); // Prints a string and the amount of times it occurs.
 void clnup(char *a1[], char *a2[]); // Frees allocated memory.
 void ncount(char *arr[], char *nused[], int count[]); // Counts the number of times a string occurs in a file.
+unsigned hash(char *name);
+NameCountData *lookup(char *name);
+NameCountData *insert(NameCountData *ncd);
+void table_print();
+void table_destroy();
 #endif
