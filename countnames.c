@@ -59,6 +59,7 @@ int main(int argc, char *argv[]) /* int argc = argument count
         NameCountData ncd;
         ncd.name = strdup(tok); /* This allocates memory on the heap to store the string,
                                       which needs to be freed later. */
+
     }
     fclose(f);
     int count[MNAME] = {0}; // Contains the number of times a name occurs in the file.

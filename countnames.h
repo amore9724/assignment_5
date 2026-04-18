@@ -16,7 +16,7 @@
 #define SHARED_MEMORY_NAME "/shared_memory_i"   // Name of shared memory area. It is a macro for portability.
 
 
-typedef struct {
+typedef struct NameCountData{
     char *name;
     int count;
     struct NameCountData *next;
